@@ -1,0 +1,27 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/contentModel.xml
+/projectSettingsUpdater.xml
+/.idea.Instant.Client.iml
+/modules.xml
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+
+/.idea/
+
+/Instant.Client.Core/bin/
+/Instant.Client.Core/obj/
+/Instant.Client.Core.Implementation/bin/
+/Instant.Client.Core.Implementation/obj/
+/Instant.Client.WPF/bin/
+/Instant.Client.WPF/obj/
+/Instant.Client.Core.Implementation/packages/
+/packages/
+/lib/
+/.vs/
+/Instant.Client.Core.Implementation/Service References/
