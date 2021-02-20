@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="Instant.Client.WPF.Views.SignInView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        mc:Ignorable="d"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Converters="clr-namespace:Instant.Client.WPF.Commands.Converters">
+
+    <UserControl.Resources>
+        <Converters:MultiValueConverter x:Key="MultiValueConverter" />
+    </UserControl.Resources>
+    <Grid x:Name="LayoutRoot" Width="700" Height="500">
+        <Rectangle Fill="#FFF4F4F5" Stroke="Black" StrokeThickness="0"/>
+        <Border CornerRadius="50,50,50,50" BorderBrush="#FF82B4E4" BorderThickness="1" HorizontalAlignment="Left" Height="288" Margin="165,104,0,0" VerticalAlignment="Top" Width="374" Background="#FF82B4E4">
+            <Button Command="{Binding AuthorizationCommand}" Content="Sign In" HorizontalAlignment="Left" Height="53" Margin="118.2,213.2,0,0" VerticalAlignment="Top" Width="143" FontFamily="Consolas" FontWeight="Bold" FontSize="16" BorderBrush="#FF5EA3E5" Background="#FF88BEF3" Foreground="White" BorderThickness="3">
+                <Button.CommandParameter>
+                    <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                        <Binding Path="Login"/>
+                        <Binding Path="Password"/>
+                    </MultiBinding>
+                </Button.CommandParameter>
+            </Button>
+        </Border>
+        <TextBox Text="{Binding Path=Login}" HorizontalAlignment="Left" Height="34" Margin="243,194,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="217" FontFamily="Consolas" FontSize="20" TextDecorations="{x:Null}" TextAlignment="Center" Padding="0,4,0,0" BorderBrush="#FF5EA3E5"/>
+        <TextBox Text="{Binding Path=Password}" HorizontalAlignment="Left" Height="34" Margin="243,263,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="217" FontFamily="Consolas" FontSize="20" TextAlignment="Center" Padding="0,4,0,0" BorderBrush="#FF5EA3E5"/>
+        <Label Content="Instant" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="295,121,0,0" FontFamily="Consolas" FontSize="25" FontWeight="Bold" Foreground="White"/>
+        <Label Content="Login" HorizontalAlignment="Left" Margin="243,168,0,0" VerticalAlignment="Top" Width="74" FontFamily="Consolas" Foreground="White"/>
+        <Label Content="Password" HorizontalAlignment="Left" Margin="243,239,0,0" VerticalAlignment="Top" Width="74" FontFamily="Consolas" Foreground="White"/>
+        <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" Margin="231,466,0,0" FontFamily="Consolas" FontSize="14">
+            Do not have an account? <Hyperlink Command="{Binding SwichToAlternativeAuthorizationCommand}">Sign Up</Hyperlink>
+        </TextBlock>
+    </Grid>
+</UserControl>

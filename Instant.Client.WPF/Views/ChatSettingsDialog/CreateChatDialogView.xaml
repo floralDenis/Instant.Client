@@ -1,0 +1,87 @@
+﻿<UserControl x:Class="Instant.Client.WPF.Views.ChatSettingsDialog.CreateChatDialogView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Instant.Client.WPF.Views.ChatSettingsDialog"
+             xmlns:Converters="clr-namespace:Instant.Client.WPF.Commands.Converters"
+             xmlns:ViewModels="clr-namespace:Instant.Client.WPF.ViewModels.ChatSettingsDialog"
+             xmlns:input="clr-namespace:System.Windows.Input;assembly=System"
+             mc:Ignorable="d" 
+             Height="494" Width="412">
+    <UserControl.Resources>
+        <Converters:MultiValueConverter x:Key="MultiValueConverter" />
+        <Converters:EnumBooleanConverter x:Key="EnumBooleanConverter" />
+        <Style TargetType="Grid" x:Key="EnableDisablePrivateChatStyle">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsChecked, ElementName=privateChatRadioButton}" Value="True">
+                    <Setter Property="Visibility" Value="Visible" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsChecked, ElementName=privateChatRadioButton}" Value="False">
+                    <Setter Property="Visibility" Value="Hidden" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="Grid" x:Key="EnableDisablePublicGroupStyle">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsChecked, ElementName=publicGroupRadioButton}" Value="True">
+                    <Setter Property="Visibility" Value="Visible" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding IsChecked, ElementName=publicGroupRadioButton}" Value="False">
+                    <Setter Property="Visibility" Value="Hidden" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <ContextMenu x:Key="ChatMemberLoginActions">
+            <MenuItem Header="Remove" Command="{Binding RemoveChatMemberFromGroupListCommand}" CommandParameter="{Binding SelectedGroupMemberLogin}" />
+        </ContextMenu>
+    </UserControl.Resources>
+    <Grid Background="White" Margin="0,0,0,-0.6">
+        <Border CornerRadius="50,50,50,50" BorderBrush="#FF82B4E4" BorderThickness="1" HorizontalAlignment="Left" Height="420" Margin="71,35,0,0" VerticalAlignment="Top" Width="269" Background="#FF82B4E4">
+            <Grid>
+                <Label Content="Select chat type:" HorizontalAlignment="Left" Margin="35,63,0,0" VerticalAlignment="Top" Width="125" FontFamily="Consolas" Foreground="White"/>
+                <RadioButton x:Name="privateChatRadioButton" Margin="38,86,127.2,315.4" Content="Private chat" GroupName="ChatType" Foreground="White" BorderBrush="#FF5EA3E5"
+                             IsChecked="{Binding Path=ChatType, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=PrivateChat}"/>
+                <RadioButton x:Name="publicGroupRadioButton" Margin="38,108,127.2,295.4" Content="Public group" GroupName="ChatType" BorderBrush="#FF5EA3E5" Foreground="White" 
+                             IsChecked="{Binding Path=ChatType, Converter={StaticResource EnumBooleanConverter}, ConverterParameter=PublicGroup}"/>
+                <Button Command="{Binding CreateChatCommand}" Content="Create" HorizontalAlignment="Left" Height="39" Margin="144,350,0,0" VerticalAlignment="Top" Width="90" FontFamily="Consolas" FontWeight="Bold" FontSize="16" BorderBrush="#FF5EA3E5" Background="#FF88BEF3" Foreground="White" BorderThickness="3">
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                            <Binding Path="ChatType"/>
+                            <Binding Path="InterlocutorUserLogin"/>
+                            <Binding Path="GroupTitle"/>
+                            <Binding Path="ChatMembersLogins"/>
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
+                <Button Content="Cancel" Command="{Binding CancelCommand}" HorizontalAlignment="Left" Height="39" Margin="39,350,0,0" VerticalAlignment="Top" Width="90" FontFamily="Consolas" FontWeight="Bold" FontSize="16" BorderBrush="#FFE55E5E" Background="#FFF38888" Foreground="White" BorderThickness="3" />
+                <Grid Style="{StaticResource EnableDisablePrivateChatStyle}">
+                    <Label Content="Enter login of user:" HorizontalAlignment="Left" Margin="38,127,0,0" VerticalAlignment="Top" Width="180" FontFamily="Consolas" Foreground="White"/>
+                    <TextBox Text="{Binding Path=InterlocutorUserLogin}" HorizontalAlignment="Left" Height="35" Margin="38,151,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" FontFamily="Consolas" FontSize="20" TextDecorations="{x:Null}" TextAlignment="Center" Padding="0,4,0,0" BorderBrush="#FF5EA3E5"/>
+                </Grid>
+                <Grid Style="{StaticResource EnableDisablePublicGroupStyle}">
+                    <Label Content="Enter name for the group:" HorizontalAlignment="Left" Margin="38,127,0,0" VerticalAlignment="Top" Width="180" FontFamily="Consolas" Foreground="White"/>
+                    <TextBox Text="{Binding Path=GroupTitle}" HorizontalAlignment="Left" Height="36" Margin="38,151,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" FontFamily="Consolas" FontSize="20" TextDecorations="{x:Null}" TextAlignment="Center" Padding="0,4,0,0" BorderBrush="#FF5EA3E5"/>
+                    <Label Content="Enter group member login:" HorizontalAlignment="Left" Margin="38,187,0,0" VerticalAlignment="Top" Width="180" FontFamily="Consolas" Foreground="White"/>
+                    <TextBox Text="{Binding Path=InterlocutorUserLogin}" HorizontalAlignment="Left" Height="36" Margin="38,211,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="152" FontFamily="Consolas" FontSize="20" TextDecorations="{x:Null}" TextAlignment="Center" Padding="0,4,0,0" BorderBrush="#FF5EA3E5"/>
+                    <Button Command="{Binding AddChatMemberToGroupListCommand}" Content="+" HorizontalAlignment="Left" Height="36" Margin="195,211,0,0" VerticalAlignment="Top" Width="38" FontFamily="Consolas" FontWeight="Bold" FontSize="16" BorderBrush="#FF5EA3E5" Background="#FF88BEF3" Foreground="White" BorderThickness="3">
+                        <Button.CommandParameter>
+                            <Binding Path="InterlocutorUserLogin" />
+                        </Button.CommandParameter>
+                    </Button>
+                    <Label Content="Chat members: " HorizontalAlignment="Left" Margin="38,248,0,0" VerticalAlignment="Top" Width="180" FontFamily="Consolas" Foreground="White"/>
+                    <ListBox SelectedItem="{Binding SelectedGroupMemberLogin}" ItemsSource="{Binding ChatMembersLogins}" ContextMenu="{StaticResource ChatMemberLoginActions}" Margin="38,272,34.2,81.4">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <WrapPanel Orientation="Horizontal">
+                                    <TextBlock Foreground="Black" Text="{Binding}" />
+                                </WrapPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </Grid>
+        </Border>
+        <Label Content="Create chat" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="127,35,0,0" FontFamily="Consolas" FontSize="25" FontWeight="Bold" Foreground="White"/>
+    </Grid>
+</UserControl>

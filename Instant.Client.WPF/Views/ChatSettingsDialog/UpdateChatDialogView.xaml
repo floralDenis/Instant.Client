@@ -1,0 +1,130 @@
+﻿<UserControl x:Class="Instant.Client.WPF.Views.ChatSettingsDialog.UpdateChatDialogView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Instant.Client.WPF.Views.ChatSettingsDialog"
+             xmlns:Converters="clr-namespace:Instant.Client.WPF.Commands.Converters"
+             xmlns:Enums="clr-namespace:Instant.Client.Core.Models.Enums;assembly=Instant.Client.Core"
+             mc:Ignorable="d" 
+             Height="494" Width="412">
+    <UserControl.Resources>
+        <Converters:MultiValueConverter x:Key="MultiValueConverter" />
+        <Converters:EnumBooleanConverter x:Key="EnumBooleanConverter" />
+        <Style TargetType="Grid" x:Key="EnableDisablePrivateChatStyle">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ChatType}" Value="{x:Static Enums:ChatTypes.PrivateChat}">
+                    <Setter Property="Visibility" Value="Visible" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding ChatType}" Value="{x:Static Enums:ChatTypes.PublicGroup}">
+                    <Setter Property="Visibility" Value="Hidden" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="Grid" x:Key="EnableDisablePublicGroupStyle">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ChatType}" Value="{x:Static Enums:ChatTypes.PublicGroup}">
+                    <Setter Property="Visibility" Value="Visible" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding ChatType}" Value="{x:Static Enums:ChatTypes.PrivateChat}">
+                    <Setter Property="Visibility" Value="Hidden" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <ContextMenu x:Key="ChatMemberLoginActions">
+            <MenuItem Header="Promote to Admin" Command="{Binding PromoteChatMemeberCommand}">
+                <MenuItem.CommandParameter>
+                    <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                        <Binding Path="SelectedGroupMemberLogin"/>
+                        <Binding Source="{x:Static Enums:ChatPermissionTypes.Administrate}" />
+                    </MultiBinding>
+                </MenuItem.CommandParameter>
+            </MenuItem>
+            <!--<MenuItem Header="Promote to Moder" Command="{Binding PromoteChatMemeberCommand}">
+                <MenuItem.CommandParameter>
+                    <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                        <Binding Path="SelectedGroupMemberLogin"/>
+                        <Binding Source="{x:Static Enums:ChatPermissionTypes.Moderate}" />
+                    </MultiBinding>
+                </MenuItem.CommandParameter>
+            </MenuItem>-->
+            <MenuItem Header="Promote to Member" Command="{Binding PromoteChatMemeberCommand}">
+                <MenuItem.CommandParameter>
+                    <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                        <Binding Path="SelectedGroupMemberLogin"/>
+                        <Binding Source="{x:Static Enums:ChatPermissionTypes.ReadWrite}" />
+                    </MultiBinding>
+                </MenuItem.CommandParameter>
+            </MenuItem>
+            <MenuItem Header="Mute member" Command="{Binding PromoteChatMemeberCommand}">
+                <MenuItem.CommandParameter>
+                    <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                        <Binding Path="SelectedGroupMemberLogin"/>
+                        <Binding Source="{x:Static Enums:ChatPermissionTypes.Read}" />
+                    </MultiBinding>
+                </MenuItem.CommandParameter>
+            </MenuItem>
+            <MenuItem Header="Kick member" Command="{Binding PromoteChatMemeberCommand}">
+                <MenuItem.CommandParameter>
+                    <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                        <Binding Path="SelectedGroupMemberLogin"/>
+                        <Binding Source="{x:Static Enums:ChatPermissionTypes.Banned}" />
+                    </MultiBinding>
+                </MenuItem.CommandParameter>
+            </MenuItem>
+        </ContextMenu>
+    </UserControl.Resources>
+    <Grid Background="White" Margin="0,0,0,-0.6">
+        <Border CornerRadius="50,50,50,50" BorderBrush="#FF82B4E4" BorderThickness="1" HorizontalAlignment="Left" Height="420" Margin="71,35,0,0" VerticalAlignment="Top" Width="269" Background="#FF82B4E4">
+            <Grid>
+                <Grid Style="{StaticResource EnableDisablePrivateChatStyle}">
+                    <Label  Content="Login of your interlocutor:" HorizontalAlignment="Left" Margin="38,60,0,0" VerticalAlignment="Top" Width="195" FontFamily="Consolas" Foreground="White"/>
+                    <TextBox IsEnabled="False" Text="{Binding Path=InterlocutorUserLogin}" HorizontalAlignment="Left" Height="35" Margin="38,84,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" FontFamily="Consolas" FontSize="20" TextDecorations="{x:Null}" TextAlignment="Center" Padding="0,4,0,0" BorderBrush="#FF5EA3E5"/>
+                    <TextBlock TextWrapping="Wrap" Text="This is private chat. From this page you can only delete this chat with your interlocutor with all message history. This action can not be reverted" HorizontalAlignment="Left" Margin="38,137,0,0" VerticalAlignment="Top" Width="195" FontFamily="Consolas" Foreground="White" Height="88"/>
+                    <Button Command="{Binding DeleteChatCommand}" Content="Delete chat" HorizontalAlignment="Left" Height="39" Margin="38,245,0,0" VerticalAlignment="Top" Width="195" FontFamily="Consolas" FontWeight="Bold" FontSize="16" BorderBrush="#FFE55E5E" Background="#FFF38888" Foreground="White" BorderThickness="3" />
+                    <Button Content="OK" Command="{Binding CancelCommand}" HorizontalAlignment="Left" Height="39" Margin="38,350,0,0" VerticalAlignment="Top" Width="195" FontFamily="Consolas" FontWeight="Bold" FontSize="16" BorderBrush="#FFE55E5E" Background="#FFF38888" Foreground="White" BorderThickness="3" />
+                </Grid>
+                <Grid Style="{StaticResource EnableDisablePublicGroupStyle}">
+                    <Label Content="Enter name for the group:" HorizontalAlignment="Left" Margin="38,37,0,0" VerticalAlignment="Top" Width="180" FontFamily="Consolas" Foreground="White"/>
+                    <TextBox Text="{Binding Path=GroupTitle}" HorizontalAlignment="Left" Height="36" Margin="38,61,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="195" FontFamily="Consolas" FontSize="20" TextDecorations="{x:Null}" TextAlignment="Center" Padding="0,4,0,0" BorderBrush="#FF5EA3E5"/>
+                    <Label Content="Chat members: " HorizontalAlignment="Left" Margin="38,158,0,0" VerticalAlignment="Top" Width="180" FontFamily="Consolas" Foreground="White"/>
+                    <ListBox ItemsSource="{Binding ChatMembersLogins}" SelectedItem="{Binding SelectedGroupMemberLogin}" ContextMenu="{StaticResource ChatMemberLoginActions}" Margin="38,182,34.2,171.4">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <WrapPanel Orientation="Horizontal">
+                                    <TextBlock Foreground="Black" Text="{Binding}" />
+                                </WrapPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <Button Command="{Binding PromoteChatMemeberCommand}" Content="Leave" HorizontalAlignment="Left" Height="34" Margin="39,260,0,0" VerticalAlignment="Top" Width="195" FontFamily="Consolas" FontWeight="Bold" FontSize="16" BorderBrush="#FFE55E5E" Background="#FFF38888" Foreground="White" BorderThickness="3" >
+                        <Button.CommandParameter>
+                            <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                <Binding Source="{x:Null}" />
+                                <Binding Source="{x:Static Enums:ChatPermissionTypes.None}" />
+                            </MultiBinding>
+                        </Button.CommandParameter>
+                    </Button>
+                    <Button Command="{Binding UpdateChatCommand}" Content="Update" HorizontalAlignment="Left" Height="39" Margin="144,350,0,0" VerticalAlignment="Top" Width="90" FontFamily="Consolas" FontWeight="Bold" FontSize="16" BorderBrush="#FF5EA3E5" Background="#FF88BEF3" Foreground="White" BorderThickness="3">
+                        <Button.CommandParameter>
+                            <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                <Binding Path="GroupTitle"/>
+                                <Binding Path="ChatMembersLogins"/>
+                            </MultiBinding>
+                        </Button.CommandParameter>
+                    </Button>
+                    <Button Command="{Binding DeleteChatCommand}" Content="Delete chat" HorizontalAlignment="Left" Height="39" Margin="39,303,0,0" VerticalAlignment="Top" Width="195" FontFamily="Consolas" FontWeight="Bold" FontSize="16" BorderBrush="#FFE55E5E" Background="#FFF38888" Foreground="White" BorderThickness="3" >
+                        <Button.CommandParameter>
+                            <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                <Binding Path="MainViewModel.CurrentChat.ChatId"/>
+                                <Binding Path="MainViewModel.CurrentUser.Login" />
+                            </MultiBinding>
+                        </Button.CommandParameter>
+                    </Button>
+                    <Button Content="Cancel" Command="{Binding CancelCommand}" HorizontalAlignment="Left" Height="39" Margin="39,350,0,0" VerticalAlignment="Top" Width="90" FontFamily="Consolas" FontWeight="Bold" FontSize="16" BorderBrush="#FFE55E5E" Background="#FFF38888" Foreground="White" BorderThickness="3" />
+                </Grid>
+            </Grid>
+        </Border>
+        <Label Content="Update chat" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="127,35,0,0" FontFamily="Consolas" FontSize="25" FontWeight="Bold" Foreground="White"/>
+    </Grid>
+</UserControl>
